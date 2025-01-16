@@ -1,3 +1,5 @@
+//I added three features to exceed the requirements: mood tracking for each journal entry, keyword search functionality to find entries easily
+//and a statistics display showing the total entries and mood breakdown.
 using System;
 using System.Collections.Generic;
 using System.IO;
