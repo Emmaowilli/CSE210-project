@@ -1,2 +1,3 @@
-2025-01-16 21:13:29|Describe a moment today when you felt truly happy.|I felt really happy when i was at the work place during lunch time|Happy
-2025-01-16 21:16:02|Describe a moment today when you felt truly happy.|from church after work, I reach the chapel and i first meet my best friend sitting and i was so happy to see her aeound|Happy
+2025-01-23 20:23:48|If you could relive one moment from today, what would it be?|sleeping|Neutral
+2025-01-23 20:25:12|What was the most interesting thing you learned today?|how to fixed error with my vs code|Happy
+2025-01-23 20:31:38|What challenge did you face today, and how did you overcome it?|I face a challenge with run c# with my vs code and i was able to fixed it, i first uninstalled the Net.core and then i re-downloaded it after word everything start working well.|Happy
