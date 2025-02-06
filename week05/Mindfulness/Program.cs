@@ -1,5 +1,9 @@
+// Added: Log file to track activities ,Added: Logging activity completion,// Added: Method to log activity
+// Added: To track used questions,// Added: Ensuring all questions are used before repeating,// Added: Collecting user responses
+// Added: Displaying number of listed items
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 abstract class MindfulnessActivity
@@ -7,6 +11,7 @@ abstract class MindfulnessActivity
     protected string Name;
     protected string Description;
     protected int Duration;
+    private static string logFile = "activity_log.txt"; // Log file to track activities
 
     public MindfulnessActivity(string name, string description)
     {
@@ -26,6 +31,7 @@ abstract class MindfulnessActivity
         Console.WriteLine("\nGood job! Activity completed.");
         Console.WriteLine($"You completed {Name} for {Duration} seconds.");
         ShowAnimation(3);
+        LogActivity(Name, Duration);
     }
 
     protected abstract void Run();
@@ -38,6 +44,14 @@ abstract class MindfulnessActivity
             Thread.Sleep(1000);
         }
         Console.WriteLine();
+    }
+
+    private void LogActivity(string activityName, int duration)
+    {
+        using (StreamWriter writer = new StreamWriter(logFile, true))
+        {
+            writer.WriteLine($"{DateTime.Now}: Completed {activityName} for {duration} seconds.");
+        }
     }
 }
 
@@ -76,6 +90,8 @@ class ReflectionActivity : MindfulnessActivity
         "What did you learn about yourself through this experience?"
     };
 
+    private static List<string> UsedQuestions = new();
+
     public ReflectionActivity() : base("Reflection Activity", "This activity helps you reflect on your strengths and resilience.") {}
 
     protected override void Run()
@@ -86,7 +102,17 @@ class ReflectionActivity : MindfulnessActivity
         ShowAnimation(3);
         for (int i = 0; i < Duration; i += 5)
         {
-            Console.WriteLine(Questions[random.Next(Questions.Count)]);
+            if (UsedQuestions.Count == Questions.Count)
+                UsedQuestions.Clear();
+
+            string question;
+            do
+            {
+                question = Questions[random.Next(Questions.Count)];
+            } while (UsedQuestions.Contains(question));
+
+            UsedQuestions.Add(question);
+            Console.WriteLine(question);
             ShowAnimation(5);
         }
     }
@@ -110,16 +136,18 @@ class ListingActivity : MindfulnessActivity
         string prompt = Prompts[random.Next(Prompts.Count)];
         Console.WriteLine(prompt);
         ShowAnimation(3);
-        Console.WriteLine("Start listing items (press Enter after each item, type 'done' to finish):");
-        int count = 0;
+        Console.WriteLine("Start listing items:");
+
+        List<string> responses = new();
         DateTime endTime = DateTime.Now.AddSeconds(Duration);
         while (DateTime.Now < endTime)
         {
-            string input = Console.ReadLine();
-            if (input.ToLower() == "done") break;
-            count++;
+            Console.Write("- ");
+            string response = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(response))
+                responses.Add(response);
         }
-        Console.WriteLine($"You listed {count} items!");
+        Console.WriteLine($"You listed {responses.Count} items.");
     }
 }
 
@@ -129,27 +157,70 @@ class Program
     {
         while (true)
         {
-            Console.WriteLine("\nMindfulness Program");
+            Console.Clear();
+            Console.WriteLine("Welcome to the Mindfulness Program!");
+            Console.WriteLine("Please select an activity:");
             Console.WriteLine("1. Breathing Activity");
             Console.WriteLine("2. Reflection Activity");
             Console.WriteLine("3. Listing Activity");
-            Console.WriteLine("4. Exit");
-            Console.Write("Choose an activity: ");
+            Console.WriteLine("4. View Activity Log");
+            Console.WriteLine("5. Exit");
+            Console.Write("Enter your choice: ");
+
             string choice = Console.ReadLine();
+            MindfulnessActivity activity = null;
 
-            MindfulnessActivity activity = choice switch
+            switch (choice)
             {
-                "1" => new BreathingActivity(),
-                "2" => new ReflectionActivity(),
-                "3" => new ListingActivity(),
-                "4" => null,
-                _ => throw new Exception("Invalid choice!")
-            };
+                case "1":
+                    activity = new BreathingActivity();
+                    break;
+                case "2":
+                    activity = new ReflectionActivity();
+                    break;
+                case "3":
+                    activity = new ListingActivity();
+                    break;
+                case "4":
+                    ShowActivityLog();
+                    continue;
+                case "5":
+                    Console.WriteLine("Thank you for using the Mindfulness Program. Goodbye!");
+                    return;
+                default:
+                    Console.WriteLine("Invalid choice. Please select again.");
+                    Thread.Sleep(2000);
+                    continue;
+            }
 
-            if (activity == null)
-                break;
+            if (activity != null)
+            {
+                activity.StartActivity();
+            }
 
-            activity.StartActivity();
+            Console.WriteLine("\nPress Enter to return to the main menu...");
+            Console.ReadLine();
         }
+    }
+
+    private static void ShowActivityLog()
+    {
+        string logFile = "activity_log.txt";
+        Console.Clear();
+        Console.WriteLine("Activity Log:");
+        if (File.Exists(logFile))
+        {
+            string[] logs = File.ReadAllLines(logFile);
+            foreach (string log in logs)
+            {
+                Console.WriteLine(log);
+            }
+        }
+        else
+        {
+            Console.WriteLine("No activities logged yet.");
+        }
+        Console.WriteLine("\nPress Enter to return...");
+        Console.ReadLine();
     }
 }
