@@ -1,0 +1,26 @@
+-50
+1
+SimpleGoal,Run a marathon,1000,False
+EternalGoal,Read scriptures,100,False
+ChecklistGoal,Attend temple,50,False
+NegativeGoal,Skip exercise,200,False
+SimpleGoal,Run a marathon,1000,False
+EternalGoal,Read scriptures,100,False
+ChecklistGoal,Attend temple,50,False
+NegativeGoal,Skip exercise,-200,False
+SimpleGoal,Run a marathon,1000,False
+EternalGoal,Read scriptures,100,False
+ChecklistGoal,Attend temple,50,False
+NegativeGoal,Skip exercise,200,False
+SimpleGoal,Run a marathon,1000,False
+EternalGoal,Read scriptures,100,False
+ChecklistGoal,Attend temple,50,False
+NegativeGoal,Skip exercise,-200,False
+SimpleGoal,Run a marathon,1000,False
+EternalGoal,Read scriptures,100,False
+ChecklistGoal,Attend temple,50,False
+NegativeGoal,Skip exercise,200,False
+SimpleGoal,Run a marathon,1000,False
+EternalGoal,Read scriptures,100,False
+ChecklistGoal,Attend temple,50,False
+NegativeGoal,Skip exercise,-200,False
